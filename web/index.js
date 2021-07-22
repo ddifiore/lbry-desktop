@@ -14,12 +14,6 @@ const DIST_ROOT = path.resolve(__dirname, 'dist');
 app.proxy = true;
 
 app.use(async (ctx, next) => {
-  if (ctx.request.url !== '/robots.txt') {
-    ctx.status = 404;
-    ctx.body = 'Test instance disabled. Visit https://odysee.com for the actual site.';
-    return;
-  }
-
   try {
     await next();
   } catch (err) {
@@ -35,11 +29,9 @@ app.use(redirectMiddleware);
 app.use(iframeDestroyerMiddleware);
 
 // Check if the request url matches any assets inside of /dist
-app.use(
-  serve(DIST_ROOT, {
-    maxage: 3600000, // set a cache time of one hour, helpful for mobile dev
-  })
-);
+app.use(serve(DIST_ROOT, {
+  maxage: 3600000, // set a cache time of one hour, helpful for mobile dev
+}));
 
 app.use(serve(DIST_ROOT)); // Check if the request url matches any assets inside of /dist
 
