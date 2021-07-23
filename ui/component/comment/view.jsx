@@ -59,7 +59,9 @@ type Props = {
   stakedLevel: number,
   supportAmount: number,
   numDirectReplies: number,
-  isFiat: boolean
+  isModerator: boolean,
+  isGlobalMod: boolean,
+  isFiat: boolean,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -92,6 +94,8 @@ function Comment(props: Props) {
     stakedLevel,
     supportAmount,
     numDirectReplies,
+    isModerator,
+    isGlobalMod,
     isFiat,
   } = props;
 
@@ -243,6 +247,18 @@ function Comment(props: Props) {
               />
 
               {supportAmount > 0 && <CreditAmount isFiat={isFiat} amount={supportAmount} superChatLight size={12} />}
+
+              {isGlobalMod && (
+                <span className="comment__badge">
+                  <Icon icon={ICONS.BADGE_GLOBAL_MOD} size={20} tooltip customTooltipText={__('Global Admin')} />
+                </span>
+              )}
+
+              {isModerator && (
+                <span className="comment__badge">
+                  <Icon icon={ICONS.BADGE_MOD} size={20} tooltip customTooltipText={__('Moderator')} />
+                </span>
+              )}
 
               {isPinned && (
                 <span className="comment__pin">

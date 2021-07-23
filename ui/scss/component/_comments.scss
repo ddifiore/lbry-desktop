@@ -215,6 +215,14 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
+.comment__badge {
+  margin-left: var(--spacing-xxs);
+
+  .icon {
+    color: var(--color-primary);
+  }
+}
+
 .comment__message {
   word-break: break-word;
   max-width: 35rem;
