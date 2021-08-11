@@ -168,3 +168,4 @@ export const CONTENT = 'Content';
 export const STAR = 'star';
 export const MUSIC = 'MusicCategory';
 export const BADGE_MOD = 'BadgeMod';
+export const REPEAT = 'Repeat';
