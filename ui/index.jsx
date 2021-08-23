@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/browser';
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
+import { AuthProvider } from 'component/auth/authProvider';
 // @if TARGET='app'
 import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
@@ -285,12 +286,14 @@ function AppWrapper() {
       >
         <Fragment>
           {readyToLaunch ? (
-            <ConnectedRouter history={history}>
-              <ErrorBoundary>
-                <App />
-                <SnackBar />
-              </ErrorBoundary>
-            </ConnectedRouter>
+            <AuthProvider>
+              <ConnectedRouter history={history}>
+                <ErrorBoundary>
+                  <App />
+                  <SnackBar />
+                </ErrorBoundary>
+              </ConnectedRouter>
+            </AuthProvider>
           ) : (
             <Fragment>
               <SplashScreen onReadyToLaunch={() => setReadyToLaunch(true)} />

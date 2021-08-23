@@ -12,6 +12,8 @@ import { GetLinksData } from 'util/buildHomepage';
 
 import HomePage from 'page/home';
 
+import { AuthConsumer } from 'component/auth/authProvider';
+
 // @if TARGET='app'
 const BackupPage = lazyImport(() => import('page/backup' /* webpackChunkName: "backup" */));
 // @endif
@@ -69,7 +71,9 @@ const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpac
 const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "secondary" */));
 const SettingsAdvancedPage = lazyImport(() => import('page/settingsAdvanced' /* webpackChunkName: "secondary" */));
 const SettingsStripeCard = lazyImport(() => import('page/settingsStripeCard' /* webpackChunkName: "secondary" */));
-const SettingsStripeAccount = lazyImport(() => import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */));
+const SettingsStripeAccount = lazyImport(() =>
+  import('page/settingsStripeAccount' /* webpackChunkName: "secondary" */)
+);
 const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "secondary" */));
 const SettingsNotificationsPage = lazyImport(() =>
   import('page/settingsNotifications' /* webpackChunkName: "secondary" */)
@@ -124,17 +128,22 @@ type PrivateRouteProps = Props & {
 function PrivateRoute(props: PrivateRouteProps) {
   const { component: Component, isAuthenticated, ...rest } = props;
   const urlSearchParams = new URLSearchParams(props.location.search);
-  const redirectUrl = urlSearchParams.get('redirect');
+  // const redirectUrl = urlSearchParams.get('redirect');
   return (
     <Route
       {...rest}
-      render={(props) =>
-        isAuthenticated || !IS_WEB ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={`/$/${PAGES.AUTH}?redirect=${redirectUrl || props.location.pathname}`} />
-        )
-      }
+      render={(Component) => (props) => (
+        <AuthConsumer>
+          {({ isAuthenticated, signinRedirect }) => {
+            if ((!!Component && isAuthenticated()) || !IS_WEB) {
+              return <Component {...props} />;
+            } else {
+              signinRedirect();
+              return <span>loading</span>;
+            }
+          }}
+        </AuthConsumer>
+      )}
     />
   );
 }
@@ -246,7 +255,11 @@ function AppRouter(props: Props) {
         <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
         <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
         <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
-
+        {/* <Route exact path="/$/signin-oidc" component={Callback} /> */}
+        {/* <Route exact path="/odiclogout" component={Logout} /> */}
+        {/* <Route exact path="/oidclogout/callback" component={LogoutCallback} /> */}
+        {/* <Route exact path="/oidcregister" component={Register} /> */}
+        {/* <Route exact path="/oidcsilentrenew" component={SilentRenew} /> */}
         <Route path={`/`} exact component={HomePage} />
         <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />
         {SIMPLE_SITE && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
