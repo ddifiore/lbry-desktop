@@ -200,7 +200,7 @@ export default function ClaimList(props: Props) {
               {injectedItem && index === 4 && <li>{injectedItem}</li>}
               <ClaimPreview
                 uri={uri}
-                containerId={id}
+                containerId={id} // mainSearchKey or recommendationId
                 indexInContainer={index}
                 type={type}
                 active={activeUri && uri === activeUri}

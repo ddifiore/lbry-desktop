@@ -98,7 +98,7 @@ export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
   createSelector(makeSelectClaimForClaimId(claimId), selectSearchResultByQuery, (claim, searchUrisByQuery) => {
     // TODO: DRY this out.
     let poweredBy;
-    if (claim) {
+    if (claim && claimId) {
       const isMature = isClaimNsfw(claim);
       const { title } = claim.value;
 

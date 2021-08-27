@@ -245,11 +245,30 @@ export const makeSelectInsufficientCreditsForUri = (uri: string) =>
     }
   );
 
+// probably delete these
 export const makeSelectRecommendationId = (claimId: string) =>
   createSelector(selectState, (state) => state.recommendationId[claimId]);
 
 export const makeSelectRecommendationParentId = (claimId: string) =>
   createSelector(selectState, (state) => state.recommendationParentId[claimId]);
+
+export const makeSelectRecommendedIdsForUri = (uri: string) =>
+  createSelector(
+    selectState,
+    makeSelectRecommendedContentForUri(uri),
+    selectClaimsByUri,
+    (state, recommendedContent, claimsByUri) => {
+      return claimsByUri.map((i) => claimsByUri[i]);
+    }
+  );
+
+// export const makeSelectRecommendedIdsForClaimId = (claimId: string) =>
+//   createSelector() => {
+//   //const uri =
+//   // get the uri for claimId
+//   // makeSelectRecommendedIdsForUri()
+//
+// }
 
 export const makeSelectRecommendedClaimIds = (claimId: string) =>
   createSelector(selectState, selectClaimIdsByUri, (state, claimIdsByUri) => {
