@@ -28,6 +28,7 @@ const SEARCH_PREFIX = `$/${PAGES.SEARCH}q=`;
 const INVALID_URL_ERROR = "Invalid LBRY URL entered. Only A-Z, a-z, 0-9, and '-' allowed.";
 const TAG_SEARCH_PREFIX = 'tag:';
 
+const K_KEY_CODE = 75;
 const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
 
@@ -232,8 +233,21 @@ export default function WunderBarSuggestions(props: Props) {
         return;
       }
 
+      if (keyCode === K_KEY_CODE && ctrlKey) {
+        inputRef.current.focus();
+        inputRef.current.select();
+        return;
+      }
+
       if (inputRef.current === document.activeElement && keyCode === ESC_KEY_CODE) {
-        inputRef.current.blur();
+        // If the user presses escape and the text has already been cleared then blur the widget
+        if (inputRef.current.value === '') {
+          inputRef.current.blur();
+        } else {
+          // Remove the current text
+          inputRef.current.value = '';
+          inputRef.current.focus();
+        }
       }
 
       // @if TARGET='app'
